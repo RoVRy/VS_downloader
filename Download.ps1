@@ -2,8 +2,8 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 function ShowErrorNExit($ErrorCode) {
-    Write-Host $ErrorText' '$ErrorCode'`n' -ForegroundColor Red
-    Write-Host $PaKText'`n'
+    Write-Host $ErrorText[$LngIndex]' '$ErrorCode'`n' -ForegroundColor Red
+    Write-Host $PaKText[$LngIndex]'`n'
     [void] $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown,AllowCtrlC")
 }
 
@@ -199,7 +199,7 @@ $form.Controls.Add($listboxEd)
 $label2 = New-Object System.Windows.Forms.Label
 $label2.Location = New-Object System.Drawing.Point(20, 50)
 $label2.Size = New-Object System.Drawing.Size(250, 20)
-$label2.Text = $LangTitle
+$label2.Text = $LangTitle[$LngIndex]
 $form.Controls.Add($label2)
 
 $listboxLng = New-Object System.Windows.Forms.ListBox
@@ -252,9 +252,9 @@ if ($listboxLng.SelectedItems.Count -ne 14) {
     $Prm += $PrmLng
 }
 
-Write-Host $ConsoleText1 -ForegroundColor Blue -NoNewline
+Write-Host $ConsoleText1[$LngIndex] -ForegroundColor Blue -NoNewline
 Write-Host $Edition -ForegroundColor White
-Write-Host $ConsoleText2 -ForegroundColor Blue -NoNewline
+Write-Host $ConsoleText2[$LngIndex] -ForegroundColor Blue -NoNewline
 
 $result = Invoke-WebRequest $DownloadLink
 if ($result.StatusCode -ne 200) {
@@ -269,7 +269,7 @@ if ($URL.Matches.Lenght -eq 0) {
 }
 
 Write-Host "${$URL.Matches.Value}`n"
-Write-Host $ConsoleText3 -ForegroundColor Blue -NoNewline
+Write-Host $ConsoleText3[$LngIndex] -ForegroundColor Blue -NoNewline
 $result = Invoke-WebRequest $URL.Matches.Value -OutFile "installer.tmp"
 Write-Host $OKText[$LngIndex]"`n" -ForegroundColor Green
 
@@ -291,7 +291,7 @@ else {
         Remove-Item -Path "installer.tmp"
     }
 }
-Write-Host $ConsoleText4 -ForegroundColor Blue -NoNewline
+Write-Host $ConsoleText4[$LngIndex] -ForegroundColor Blue -NoNewline
 
 $Process = Start-Process -FilePath $Exe -ArgumentList $Prm -Wait -PassThru
 if ($Process.ExitCode -ne 0) {
@@ -303,7 +303,7 @@ $Arch = ".\$Edition\Archive"
 if ((Test-Path -Path $Arch) -eq $True) {
     $Cln = ""
     Get-ChildItem -Path $Arch -Directory | ForEach-Object $Cln = (($Cln -eq "") ? "" : $Cln + " ") + "--clean .\Archive\$_\Catalog.json"
-    Write-Host $ConsoleText5 -ForegroundColor Blue -NoNewline
+    Write-Host $ConsoleText5[$LngIndex] -ForegroundColor Blue -NoNewline
     $Process = Start-Process -FilePath $Exe -ArgumentList $Prm $Cln -Wait -PassThru
     if ($Process.ExitCode -ne 0) {
         ShowErrorNExit($Process.ExitCode)
@@ -311,6 +311,6 @@ if ((Test-Path -Path $Arch) -eq $True) {
     }
     Write-Host $OKText[$LngIndex]"`n" -ForegroundColor Green
     Remove-Item -Path $Arch -Recurse
-    Write-Host $ConsoleText6"`n" -ForegroundColor Blue
+    Write-Host $ConsoleText6[$LngIndex]"`n" -ForegroundColor Blue
     exit
 }
