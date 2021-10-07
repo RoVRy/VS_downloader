@@ -212,7 +212,7 @@ foreach ($item in $UniqURLs) {
 #>
 $form = New-Object System.Windows.Forms.Form
 $form.Text = $WindowTitle[$LngIndex]                                        # Offline package settings
-$form.Size = New-Object System.Drawing.Size(400,370)
+$form.Size = New-Object System.Drawing.Size(410,380)
 $form.FormBorderStyle = 'FixedSingle'
 $form.MaximizeBox = $false
 $form.StartPosition = 'CenterScreen'
@@ -247,11 +247,11 @@ foreach ($lng in $Languages[1]) {
 }
 $listboxLng.SetSelected($LngIndex, $true);
 $listboxLng.SelectionMode = 'MultiExtended'
-$listboxLng.Height = 250
+$listboxLng.Height = 260
 $form.Controls.Add($listboxLng)
 
 $okButton = New-Object System.Windows.Forms.Button
-$okButton.Location = New-Object System.Drawing.Point(260, 240)
+$okButton.Location = New-Object System.Drawing.Point(265, 245)
 $okButton.Size = New-Object System.Drawing.Size(100, 30)
 $okButton.Text = $OKText[$LngIndex]                                         # OK button
 $okButton.DialogResult = [System.Windows.Forms.DialogResult]::OK
@@ -259,7 +259,7 @@ $form.AcceptButton = $okButton
 $form.Controls.Add($okButton)
 
 $cancelButton = New-Object System.Windows.Forms.Button
-$cancelButton.Location = New-Object System.Drawing.Point(260, 280)
+$cancelButton.Location = New-Object System.Drawing.Point(265, 290)
 $cancelButton.Size = New-Object System.Drawing.Size(100, 30)
 $cancelButton.Text = $CancelText[$LngIndex]                                 # Cancel button
 $cancelButton.DialogResult = [System.Windows.Forms.DialogResult]::Cancel
@@ -340,8 +340,7 @@ Write-Host $OKText[$LngIndex]"`n" -ForegroundColor Green
 Write-Host $ConsoleText5[$LngIndex] -ForegroundColor Cyan -NoNewline        # Running the online installer in the cleanup mode from the obsolete packages
 $Arch = ".\$Edition\Archive"
 if ((Test-Path -Path $Arch) -eq $True) {
-    $Cln = ""
-    Get-ChildItem -Path $Arch -Directory | ForEach-Object $Cln = (($Cln -eq "") ? "" : $Cln + " ") + "--clean .\Archive\$_\Catalog.json"
+    Get-ChildItem -Path $Arch -Directory | ForEach-Object -Begin { $Cln = "" } -Process { $Cln = (($Cln -eq "") ? "" : $Cln + " ") + "--clean .\Archive\$_\Catalog.json" }
     $Process = Start-Process -FilePath $Exe -ArgumentList $Prm $Cln -Wait -PassThru
     if ($Process.ExitCode -ne 0) {
         ShowErrorNExit($Process.ExitCode)
