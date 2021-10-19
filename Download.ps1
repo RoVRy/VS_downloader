@@ -340,7 +340,7 @@ Write-Host $OKText[$LngIndex]"`n" -ForegroundColor Green
 Write-Host $ConsoleText5[$LngIndex] -ForegroundColor Cyan -NoNewline        # Running the online installer in the cleanup mode from the obsolete packages
 $Arch = ".\$Edition\Archive"
 if ((Test-Path -Path $Arch) -eq $True) {
-    Get-ChildItem -Path $Arch -Directory | ForEach-Object -Begin { $Cln = "" } -Process { $Cln = (($Cln -eq "") ? "" : $Cln + " ") + "--clean .\Archive\$_\Catalog.json" }
+    Get-ChildItem -Path $Arch -Directory | ForEach-Object -Begin { $Cln = "" } -Process { $Cln = (($Cln -eq "") ? "" : $Cln + " ") + "--clean $_\Catalog.json" }
     $Process = Start-Process -FilePath $Exe -ArgumentList $Prm $Cln -Wait -PassThru
     if ($Process.ExitCode -ne 0) {
         ShowErrorNExit($Process.ExitCode)
